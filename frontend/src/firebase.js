@@ -1,7 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getDatabase } from "firebase/database";
-
+import { getFirestore } from "firebase/firestore";
 const firebaseConfig = {
   // Use import.meta.env to pull from your .env file
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -13,10 +12,10 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
-// Initialize the CogniPath Firebase Instance
 const app = initializeApp(firebaseConfig);
 
-// Export for use in AuthPage and ProfilePage
+// Export Authentication
 export const auth = getAuth(app);
-export const database = getDatabase(app);
-export default app;
+
+// Export Firestore Database
+export const db = getFirestore(app);

@@ -1,37 +1,21 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { onAuthStateChanged } from 'firebase/auth'; // <-- 2. Import the listener
-import { ref, onValue } from "firebase/database"; // Add this to your imports
-import { auth, database as db } from '../firebase'; // <-- 1. Import your Firebase instances
+import { onAuthStateChanged } from 'firebase/auth'; 
+import { doc, onSnapshot } from "firebase/firestore"; 
+import { auth, db } from '../firebase'; 
 
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
-  // --- NEW: FIREBASE SECURITY STATE ---
+  // --- AUTH & LOADING STATE ---
   const [firebaseUser, setFirebaseUser] = useState(null);
-  const [loading, setLoading] = useState(true); // <-- This stops the bounce!
-useEffect(() => {
-  if (firebaseUser) {
-    const safeEmail = firebaseUser.email.replace(/\./g, '_');
-    const analysisRef = ref(db, `users/${safeEmail}/last_analysis`);
+  const [loading, setLoading] = useState(true);
 
-    // Listen for data changes in real-time
-    const unsubscribe = onValue(analysisRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        setAnalysisResults(data);
-        setHasData(true);
-      }
-    });
-
-    return () => unsubscribe();
-  }
-}, [firebaseUser]);
-  // --- YOUR EXISTING SYSTEM STATE ---
+  // --- ANALYSIS STATE ---
   const [hasData, setHasData] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResults, setAnalysisResults] = useState(null);
 
-  // Keeping your profile data intact for the Dashboard UI
+  // --- MOCK USER PROFILE (For Dashboard UI) ---
   const [user, setUser] = useState({
     name: "Nitya Patel",
     initials: "NP",
@@ -44,17 +28,38 @@ useEffect(() => {
     cgpa: "9.23"
   });
 
-  // --- NEW: FIREBASE LISTENER ---
+  // --- 1. FIREBASE AUTH LISTENER ---
   useEffect(() => {
-    // This tells the app to wait until Google confirms your identity
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setFirebaseUser(currentUser);
-      setLoading(false); // Lower the shield, Firebase is ready!
+      setLoading(false); 
     });
-    
     return () => unsubscribe();
   }, []);
 
+  // --- 2. FIRESTORE REAL-TIME DATA LISTENER ---
+  useEffect(() => {
+    if (firebaseUser?.email) {
+      // Listens to your specific user document for new AI results
+      const userDocRef = doc(db, 'users', firebaseUser.email);
+
+      const unsubscribe = onSnapshot(userDocRef, (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          if (data.last_analysis) {
+            setAnalysisResults(data.last_analysis);
+            setHasData(true);
+          }
+        }
+      }, (error) => {
+        console.error("Firestore Listener Error:", error);
+      });
+
+      return () => unsubscribe();
+    }
+  }, [firebaseUser]);
+
+  // --- 3. UPLOAD LOGIC ---
   const triggerUpload = async (role, description) => {
     const input = document.createElement('input');
     input.type = 'file';
@@ -72,7 +77,7 @@ useEffect(() => {
       formData.append('user_email', firebaseUser?.email || user.email);
 
       try {
-        const response = await fetch('http://localhost:8000/api/upload/resume', {
+        const response = await fetch('https://cognipath-backend.onrender.com/api/upload/resume', {
           method: 'POST', 
           body: formData,
         });
@@ -96,10 +101,12 @@ useEffect(() => {
       setAnalysisResults, isAnalyzing, setIsAnalyzing, 
       user, setUser, firebaseUser 
     }}>
-      {/* THE MAGIC SHIELD: Show this while Firebase boots up */}
       {loading ? (
-        <div className="h-screen w-screen bg-[#111111] text-[#FF4500] flex items-center justify-center font-black tracking-widest uppercase text-xl">
-          Initializing Neural Link...
+        <div className="h-screen w-screen bg-[#0a0a0a] text-[#FF4500] flex items-center justify-center font-black tracking-widest uppercase text-xl">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-12 h-12 border-4 border-[#FF4500] border-t-transparent rounded-full animate-spin"></div>
+            Initializing Neural Link...
+          </div>
         </div>
       ) : (
         children
@@ -108,6 +115,7 @@ useEffect(() => {
   );
 };
 
+// --- 4. THE EXPORT THAT WAS MISSING ---
 export const useApp = () => {
   const context = useContext(AppContext);
   if (!context) throw new Error("useApp must be used within AppProvider");

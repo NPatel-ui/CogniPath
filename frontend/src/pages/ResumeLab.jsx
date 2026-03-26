@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useApp } from '../context/AppContext';
 import { Upload, ArrowRight, FileText, Target, Cpu, Activity, Database, Network, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-
+import toast from 'react-hot-toast';
+ 
 export default function ResumeLab() {
   const { triggerUpload, hasData, isAnalyzing, analysisResults } = useApp();
   const [role, setRole] = useState("");
@@ -32,10 +33,15 @@ export default function ResumeLab() {
   ];
 
   const handleStart = () => {
-    if (!role || !jd) return alert("Configuration Error: Target Role and JD are required for calibration.");
-    triggerUpload(role, jd);
-  };
-
+  if (!role || !jd) {
+    // Triggers the neon red Enterprise error toast instead of a silent fail
+    toast.error("CONFIGURATION ERROR: ROLE & JD REQUIRED"); 
+    return; 
+  }
+  
+  // If filled out, it opens the file browser
+  triggerUpload(role, jd); 
+};
   const containerVariants = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.1 } } };
   const itemVariants = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { type: "spring", damping: 25, stiffness: 100 } } };
 

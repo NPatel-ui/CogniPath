@@ -56,19 +56,23 @@ CogniPath is built on a decoupled architecture, ensuring a lightning-fast fronte
 <p><em>Neural Architecture Landing Interface</em></p>
 <br>
 
-<img src="assets/auth.png" alt="Secure Authentication" width="800" style="border-radius: 15px; border: 1px solid #e2e8f0; margin-bottom: 20px;" />
+<img src="<img width="1919" height="1034" alt="Screenshot 2026-03-28 124215" src="https://github.com/user-attachments/assets/f0c17185-96b3-41cd-94d4-f13bcf34280f" />
+" alt="Secure Authentication" width="800" style="border-radius: 15px; border: 1px solid #e2e8f0; margin-bottom: 20px;" />
 <p><em>End-to-End Encrypted Access Node</em></p>
 <br>
 
-<img src="assets/dashboard.png" alt="User Dashboard" width="800" style="border-radius: 15px; border: 1px solid #e2e8f0; margin-bottom: 20px;" />
+<img src="<img width="1899" height="1026" alt="Screenshot 2026-03-28 124249" src="https://github.com/user-attachments/assets/401596f0-e83e-46d1-8db6-7ba847ee33b0" />
+" alt="User Dashboard" width="800" style="border-radius: 15px; border: 1px solid #e2e8f0; margin-bottom: 20px;" />
 <p><em>Personalized Dashboard & Navigation Hub</em></p>
 <br>
 
-<img src="assets/resume-lab.png" alt="Resume Lab" width="800" style="border-radius: 15px; border: 1px solid #e2e8f0; margin-bottom: 20px;" />
+<img src="<img width="1907" height="1027" alt="Screenshot 2026-03-28 124304" src="https://github.com/user-attachments/assets/d36fb0b4-45f8-492b-8cb1-385080ddc9bc" />
+" alt="Resume Lab" width="800" style="border-radius: 15px; border: 1px solid #e2e8f0; margin-bottom: 20px;" />
 <p><em>Telemetry Configuration & Document Ingestion</em></p>
 <br>
 
-<img src="assets/history.png" alt="Terminal Archive" width="800" style="border-radius: 15px; border: 1px solid #e2e8f0; margin-bottom: 20px;" />
+<img src="<img width="1900" height="993" alt="Screenshot 2026-03-28 124323" src="https://github.com/user-attachments/assets/4b606a44-15e2-433b-8431-1942e7e68cf9" />
+" alt="Terminal Archive" width="800" style="border-radius: 15px; border: 1px solid #e2e8f0; margin-bottom: 20px;" />
 <p><em>Terminal Archive & Historical Scan Records</em></p>
 
 </div>

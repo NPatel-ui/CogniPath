@@ -32,21 +32,16 @@ KEY_PATH = BASE_DIR / "serviceAccountKey.json"
 
 # ─── 1. FIREBASE INITIALIZATION ─────────────────────────────────────────────
 if not firebase_admin._apps:
-    # ⬇️ CHANGED THIS TO MATCH YOUR RENDER VARIABLE ⬇️
-    firebase_creds = os.getenv("FIREBASE_CONFIG")
+    # Check for environment variable first (Production/Render)
+    firebase_creds = os.getenv("FIREBASE_SERVICE_ACCOUNT")
     
     if firebase_creds:
-        print("🟢 Using Firebase credentials from Environment Variable")
+        # Load credentials from the JSON string stored in Render
         cred_dict = json.loads(firebase_creds)
         cred = credentials.Certificate(cred_dict)
-    elif KEY_PATH.exists():
-        print("🟡 Using Firebase credentials from local file")
-        cred = credentials.Certificate(KEY_PATH)
     else:
-        raise RuntimeError(
-            "❌ FIREBASE CREDS MISSING! You are on Render, but the 'FIREBASE_CONFIG' "
-            "Environment Variable is empty. Please check your spelling in the Render Dashboard."
-        )
+        # Fallback to local file (Local Development)
+        cred = credentials.Certificate(KEY_PATH)
         
     firebase_admin.initialize_app(cred, {
         'databaseURL': 'https://cognipath-ed89f-default-rtdb.firebaseio.com/'
@@ -63,7 +58,11 @@ app = FastAPI(title="CogniPath Neural Engine")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],
+    allow_origins=[
+        "http://localhost:5173", 
+        "http://localhost:3000",
+        "https://cogni-path.vercel.app" # ⬅️ ADD YOUR VERCEL URL HERE
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

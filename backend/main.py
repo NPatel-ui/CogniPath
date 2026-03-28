@@ -32,16 +32,21 @@ KEY_PATH = BASE_DIR / "serviceAccountKey.json"
 
 # ─── 1. FIREBASE INITIALIZATION ─────────────────────────────────────────────
 if not firebase_admin._apps:
-    # Check for environment variable first (Production/Render)
     firebase_creds = os.getenv("FIREBASE_SERVICE_ACCOUNT")
     
     if firebase_creds:
-        # Load credentials from the JSON string stored in Render
+        print("🟢 Using Firebase credentials from Environment Variable")
         cred_dict = json.loads(firebase_creds)
         cred = credentials.Certificate(cred_dict)
-    else:
-        # Fallback to local file (Local Development)
+    elif KEY_PATH.exists():
+        print("🟡 Using Firebase credentials from local file")
         cred = credentials.Certificate(KEY_PATH)
+    else:
+        # This stops the confusing "File Not Found" error and tells you exactly what to fix
+        raise RuntimeError(
+            "❌ FIREBASE CREDS MISSING! You are on Render, but the 'FIREBASE_SERVICE_ACCOUNT' "
+            "Environment Variable is empty. Please add it in your Render Dashboard."
+        )
         
     firebase_admin.initialize_app(cred, {
         'databaseURL': 'https://cognipath-ed89f-default-rtdb.firebaseio.com/'

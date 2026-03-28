@@ -43,7 +43,7 @@ CogniPath is built on a decoupled architecture, ensuring a lightning-fast fronte
 * **🗺️ Gemini-Powered Roadmaps:** Synthesizes a custom, 3-phase execution plan (Baseline, Optimization, Alignment) using Google Generative AI based on your specific gaps.(COMING SOON!!!)
 * **📊 Neural Fingerprinting:** Visualizes candidate strengths against role requirements using interactive, real-time radar charts.
 * **🗄️ Terminal Archive:** Secure, authenticated history logging via Firebase Realtime Database to track your roadmap evolution.
-* **🎙️ Mock Interviewer (WIP):** Upcoming voice-activated technical interview simulation.
+* **🎙️ Mock Interviewer (WIP):** Upcoming voice-activated technical interview simulation.(COMING SOON!!)
 
 ---
 

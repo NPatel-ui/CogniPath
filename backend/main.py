@@ -32,26 +32,33 @@ KEY_PATH = BASE_DIR / "serviceAccountKey.json"
 
 # ─── 1. FIREBASE INITIALIZATION ─────────────────────────────────────────────
 if not firebase_admin._apps:
-    # 1. Try to get credentials from Render Environment Variable
     firebase_creds_json = os.getenv("FIREBASE_SERVICE_ACCOUNT")
     
+    # Debug: This will show up in your Render logs (don't worry, it won't show the secret)
+    if firebase_creds_json:
+        print(f"📡 Found FIREBASE_SERVICE_ACCOUNT env var (Length: {len(firebase_creds_json)})")
+    else:
+        print("📡 FIREBASE_SERVICE_ACCOUNT env var NOT FOUND")
+
     if firebase_creds_json:
         try:
-            # Load credentials directly from the JSON string
+            # Clean the string in case Render added extra quotes or whitespace
+            firebase_creds_json = firebase_creds_json.strip()
             cred_dict = json.loads(firebase_creds_json)
             cred = credentials.Certificate(cred_dict)
-            print("✅ Firebase initialized via Environment Variable")
+            print("✅ Firebase successfully initialized via Environment Variable")
         except Exception as e:
-            print(f"❌ Error parsing FIREBASE_SERVICE_ACCOUNT: {e}")
-            # Fallback if parsing fails
+            print(f"❌ JSON Parsing Error: {e}")
+            # Fallback for local dev if the env var is malformed
             cred = credentials.Certificate(str(KEY_PATH))
     else:
-        # 2. Fallback to local file (for your local VS Code development)
+        # Local Fallback
         if KEY_PATH.exists():
             cred = credentials.Certificate(str(KEY_PATH))
             print("🏠 Firebase initialized via local serviceAccountKey.json")
         else:
-            print("🚨 CRITICAL: No Firebase credentials found!")
+            print("🚨 CRITICAL: No Firebase credentials found in Env or Local!")
+            # This is where your app is currently dying
             raise FileNotFoundError("Firebase credentials missing in Env and Local file.")
         
     firebase_admin.initialize_app(cred, {

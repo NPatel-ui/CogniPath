@@ -235,7 +235,7 @@ export default function ResumeLab() {
                   variants={itemVariants}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => navigate('/roadmap')} 
+                  onClick={() => navigate('/roadmap', { state: { analysisData: analysisResults } })}
                   className="w-full py-8 bg-[#FF4500] text-white rounded-[2rem] font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:bg-[#111111] transition-all duration-300 flex items-center justify-center gap-4 group"
                 >
                   Synthesize Hero Path

@@ -1,187 +1,122 @@
-import React, { useState, useEffect } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
-import { Activity, FileText, TrendingUp, Clock, Loader2, ChevronRight, Database } from 'lucide-react';
-import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
-import { auth, db } from '../firebase';
-import { onAuthStateChanged } from 'firebase/auth';
-import PageTransition from '../components/PageTransition.jsx';
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { FileStack, Calendar, ArrowRight, Activity, FlaskConical } from 'lucide-react';
+// import { db, auth } from '../firebase'; // We will use this when we wire up the database
 
-const HistoryPage = () => {
-  const [historyData, setHistoryData] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function HistoryPage() {
+  const navigate = useNavigate();
+  // State to hold history logs (Empty for now until we wire up Firebase saving)
+  const [historyLogs, setHistoryLogs] = useState([]); 
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Mouse Glow Logic
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const springX = useSpring(mouseX, { stiffness: 50, damping: 20 });
-  const springY = useSpring(mouseY, { stiffness: 50, damping: 20 });
-
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      mouseX.set(e.clientX);
-      mouseY.set(e.clientY);
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [mouseX, mouseY]);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) { await fetchUserHistory(user.uid); } 
-      else { setHistoryData([]); setLoading(false); }
-    });
-    return () => unsubscribe();
-  }, []);
-
-  const fetchUserHistory = async (userId) => {
-    try {
-      const historyRef = collection(db, 'history');
-      const q = query(historyRef, where('userId', '==', userId), orderBy('createdAt', 'desc'));
-      const querySnapshot = await getDocs(q);
-      const data = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        date: doc.data().createdAt?.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) || 'Recent'
-      }));
-      setHistoryData(data);
-    } catch (e) { console.error(e); } finally { setLoading(false); }
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: { opacity: 1, transition: { staggerChildren: 0.1 } }
   };
 
-  const getIcon = (type) => {
-    const props = { size: 22 };
-    switch (type) {
-      case 'analysis': return <Activity {...props} className="text-blue-400" />;
-      case 'document': return <FileText {...props} className="text-[#FF4500]" />;
-      case 'prediction': return <TrendingUp {...props} className="text-emerald-400" />;
-      default: return <Clock {...props} className="text-gray-400" />;
-    }
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 }
   };
 
   return (
-    <PageTransition>
-      {/* CHANGES MADE: 
-          1. Changed bg to #050505 and ensured min-h-screen 
-          2. Removed narrow max-width on the main container
-      */}
-      <div className="relative min-h-screen bg-[#050505] text-white pt-10 pb-40 px-6 md:px-12 lg:px-20 overflow-x-hidden">
+    <div className="min-h-screen bg-[#F2F0E9] px-6 md:px-12 lg:px-20 pt-24 pb-32">
+      <motion.div 
+        variants={containerVariants} 
+        initial="hidden" 
+        animate="show" 
+        className="max-w-6xl mx-auto"
+      >
         
-        {/* Cursor Glow Overlay */}
-        <motion.div 
-          className="pointer-events-none fixed inset-0 z-0 opacity-20"
-          style={{
-            background: `radial-gradient(800px circle at ${springX}px ${springY}px, rgba(255, 69, 0, 0.1), transparent 80%)`,
-          }}
-        />
-
-        {/* Global Noise */}
-        <div className="fixed inset-0 bg-noise pointer-events-none z-[1] opacity-[0.03]" />
-
-        {/* Dynamic Header & Stats Section (Spans Full Width) */}
-        <div className="relative z-10 w-full mb-16">
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10">
-            
-            <motion.div 
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="flex-1"
-            >
-              <div className="flex items-center gap-4 mb-4">
-                <span className="h-[2px] w-12 bg-[#FF4500]" />
-                <span className="text-[#FF4500] font-mono text-sm uppercase tracking-[0.4em] font-bold">Terminal Archive</span>
-              </div>
-              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black italic tracking-tighter uppercase leading-[0.9]">
-  History
-</h1>
+        {/* Page Header */}
+        <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+          <div>
+            <motion.div variants={itemVariants} className="flex items-center gap-2 mb-4">
+              <div className="w-8 h-1 bg-[#FF4500] rounded-full" />
+              <p className="text-xs font-black text-slate-500 uppercase tracking-widest">User Dashboard</p>
             </motion.div>
-
-            {/* Premium Stats Bento - Now more expansive */}
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="flex items-center gap-8 bg-[#111111]/40 backdrop-blur-2xl border border-white/5 p-8 rounded-[2.5rem] min-w-[320px]"
-            >
-              <div className="flex-1">
-                <p className="text-white/20 text-xs uppercase font-bold tracking-widest mb-2">Total Scans</p>
-                <p className="text-4xl font-black italic leading-none">{historyData.length}</p>
-              </div>
-              <div className="h-12 w-px bg-white/10" />
-              <div className="flex-1">
-                <p className="text-white/20 text-xs uppercase font-bold tracking-widest mb-2">Network</p>
-                <div className="flex items-center gap-2">
-                   <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                   <p className="text-4xl font-black text-emerald-500 italic leading-none uppercase">Live</p>
-                </div>
-              </div>
-            </motion.div>
+            <motion.h1 variants={itemVariants} className="text-4xl md:text-5xl font-black text-[#111111] tracking-tight">
+              Analysis <span className="text-[#FF4500]">History.</span>
+            </motion.h1>
           </div>
-        </div>
 
-        {/* Content Section */}
-        <div className="relative z-10 w-full">
-          {loading ? (
-            <div className="flex flex-col items-center justify-center py-40">
-              <Loader2 className="animate-spin text-[#FF4500] mb-4" size={48} />
-              <span className="text-white/20 font-mono text-sm tracking-widest uppercase">Decryption in progress...</span>
+          {/* Professional Stats Overview */}
+          <motion.div variants={itemVariants} className="flex gap-4">
+            <div className="bg-white px-6 py-4 rounded-2xl border border-slate-200 shadow-sm">
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Total Scans</p>
+              <p className="text-2xl font-black text-[#111111]">{historyLogs.length}</p>
             </div>
-          ) : historyData.length === 0 ? (
-            
-            <motion.div 
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-              className="w-full py-32 border border-white/5 rounded-[3rem] bg-[#0c0c0c]/50 backdrop-blur-sm text-center"
-            >
-              <Database className="mx-auto text-white/5 mb-8" size={100} />
-              <h2 className="text-3xl font-bold mb-4">Neural Logs Empty</h2>
-              <p className="text-white/30 max-w-md mx-auto text-lg">
-                No active records found in the CogniPath database. Start a new session to begin logging.
-              </p>
-            </motion.div>
+            <div className="bg-white px-6 py-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-center">
+              <div className="flex items-center gap-2">
+                <span className="relative flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10B981] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-[#10B981]"></span>
+                </span>
+                <p className="text-xs font-bold text-slate-600 uppercase tracking-wider">System Online</p>
+              </div>
+            </div>
+          </motion.div>
+        </header>
 
-          ) : (
-            <motion.div 
-              initial="hidden" animate="visible"
-              variants={{ visible: { transition: { staggerChildren: 0.05 } } }}
-              className="grid grid-cols-1 gap-4"
-            >
-              {historyData.map((item) => (
-                <motion.div 
-                  key={item.id}
-                  variants={{ hidden: { opacity: 0, y: 15 }, visible: { opacity: 1, y: 0 } }}
-                  whileHover={{ scale: 1.005, backgroundColor: 'rgba(255, 69, 0, 0.02)' }}
-                  className="group relative flex flex-col md:flex-row md:items-center justify-between p-7 bg-[#111111]/30 border border-white/5 rounded-[2rem] hover:border-[#FF4500]/40 transition-all duration-300"
-                >
-                  <div className="flex items-center gap-8">
-                    <div className="h-16 w-16 shrink-0 rounded-2xl bg-white/[0.02] flex items-center justify-center border border-white/5 group-hover:border-[#FF4500]/20 group-hover:bg-[#FF4500]/5 transition-all">
-                      {getIcon(item.type)}
+        {/* Content Area */}
+        <motion.div variants={itemVariants}>
+          {isLoading ? (
+            <div className="w-full h-64 flex flex-col items-center justify-center bg-white rounded-[2rem] border border-slate-200 shadow-sm">
+              <Activity className="text-[#FF4500] animate-spin mb-4" size={32} />
+              <p className="text-slate-500 font-medium">Retrieving records...</p>
+            </div>
+          ) : historyLogs.length > 0 ? (
+            /* List of Scans (Will populate when we add database saving) */
+            <div className="grid gap-4">
+              {historyLogs.map((log, index) => (
+                <div key={index} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between group hover:border-[#FF4500]/30 transition-colors cursor-pointer">
+                  <div className="flex items-center gap-6">
+                    <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center border border-slate-100 group-hover:bg-[#FF4500]/5 transition-colors">
+                      <FileStack className="text-slate-400 group-hover:text-[#FF4500] transition-colors" size={24} />
                     </div>
                     <div>
-                      <h3 className="text-xl md:text-2xl font-bold tracking-tight text-white/80 group-hover:text-white transition-colors">
-                        {item.title}
-                      </h3>
-                      <div className="flex items-center gap-4 mt-2">
-                        <span className="text-xs font-mono text-[#FF4500] uppercase tracking-tighter font-bold">{item.type}</span>
-                        <div className="h-1 w-1 bg-white/20 rounded-full" />
-                        <span className="text-xs font-mono text-white/30 uppercase">{item.date}</span>
+                      <h3 className="font-bold text-[#111111] text-lg">{log.role}</h3>
+                      <div className="flex items-center gap-2 text-slate-400 text-sm mt-1">
+                        <Calendar size={14} />
+                        <span>{log.date}</span>
                       </div>
                     </div>
                   </div>
-
-                  <div className="flex items-center justify-between md:justify-end gap-10 mt-6 md:mt-0">
-                    <div className="md:text-right">
-                      <span className="text-[10px] font-black text-[#FF4500] uppercase tracking-[0.2em] block mb-1 opacity-60">Status: {item.status || 'Archived'}</span>
-                      <span className="text-lg font-bold text-white/90">{item.score || 'View Intelligence'}</span>
+                  <div className="flex items-center gap-6">
+                    <div className="text-right">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Match Score</p>
+                      <p className="font-black text-xl text-[#111111]">{log.score}%</p>
                     </div>
-                    <div className="h-12 w-12 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-[#FF4500] group-hover:text-black transition-all duration-500 transform group-hover:rotate-45">
-                      <ChevronRight size={24} />
-                    </div>
+                    <button className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-[#FF4500] group-hover:text-white transition-all">
+                      <ArrowRight size={20} />
+                    </button>
                   </div>
-                </motion.div>
+                </div>
               ))}
-            </motion.div>
+            </div>
+          ) : (
+            /* Professional Empty State */
+            <div className="w-full bg-white rounded-[2.5rem] p-12 md:p-20 border border-slate-200 shadow-sm flex flex-col items-center justify-center text-center">
+              <div className="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mb-6 border border-slate-100 shadow-inner">
+                <FileStack size={40} className="text-slate-300" />
+              </div>
+              <h2 className="text-2xl md:text-3xl font-black text-[#111111] mb-3">No Analysis Records Found</h2>
+              <p className="text-slate-500 max-w-md mx-auto mb-8 leading-relaxed">
+                Your archive is currently empty. Once you run a resume scan through the Neural Engine, your customized roadmaps and match scores will be securely stored here.
+              </p>
+              <button 
+                onClick={() => navigate('/resume-lab')}
+                className="bg-[#111111] text-white px-8 py-4 rounded-full font-bold flex items-center gap-3 hover:bg-[#FF4500] transition-colors shadow-lg hover:shadow-orange-500/25"
+              >
+                <FlaskConical size={20} />
+                <span>Go to Resume Lab</span>
+              </button>
+            </div>
           )}
-        </div>
-      </div>
-    </PageTransition>
-  );
-};
+        </motion.div>
 
-export default HistoryPage;
+      </motion.div>
+    </div>
+  );
+}

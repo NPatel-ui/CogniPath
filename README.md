@@ -14,7 +14,6 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Status-Live-10B981?style=for-the-badge&logo=checkmarx&logoColor=white" alt="Status" />
   <img src="https://img.shields.io/badge/Version-1.0.0-FF4500?style=for-the-badge" alt="Version" />
-  <img src="https://img.shields.io/badge/License-MIT-111111?style=for-the-badge" alt="License" />
 </p>
 
 </div>
@@ -51,8 +50,26 @@ CogniPath is built on a decoupled architecture, ensuring a lightning-fast fronte
 ## 📸 Interface Preview
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/NPatel-ui/cognipath/main/assets/demo-placeholder.gif" alt="CogniPath Demo" width="800" style="border-radius: 15px; border: 1px solid #333;" />
-  <p><em>Deep Carbon & Neon Crimson Theme</em></p>
+
+<img src="assets/landing.png" alt="CogniPath Landing Page" width="800" style="border-radius: 15px; border: 1px solid #e2e8f0; margin-bottom: 20px;" />
+<p><em>Neural Architecture Landing Interface</em></p>
+<br>
+
+<img src="assets/auth.png" alt="Secure Authentication" width="800" style="border-radius: 15px; border: 1px solid #e2e8f0; margin-bottom: 20px;" />
+<p><em>End-to-End Encrypted Access Node</em></p>
+<br>
+
+<img src="assets/dashboard.png" alt="User Dashboard" width="800" style="border-radius: 15px; border: 1px solid #e2e8f0; margin-bottom: 20px;" />
+<p><em>Personalized Dashboard & Navigation Hub</em></p>
+<br>
+
+<img src="assets/resume-lab.png" alt="Resume Lab" width="800" style="border-radius: 15px; border: 1px solid #e2e8f0; margin-bottom: 20px;" />
+<p><em>Telemetry Configuration & Document Ingestion</em></p>
+<br>
+
+<img src="assets/history.png" alt="Terminal Archive" width="800" style="border-radius: 15px; border: 1px solid #e2e8f0; margin-bottom: 20px;" />
+<p><em>Terminal Archive & Historical Scan Records</em></p>
+
 </div>
 
 ---

@@ -40,7 +40,7 @@ CogniPath is built on a decoupled architecture, ensuring a lightning-fast fronte
 
 * **📄 Resume Lab:** Upload a PDF to instantly extract features. The system parses your data to evaluate your Academic Excellence, Project Impact, Tech Stack, and more.
 * **🧠 Placement MLP Inference:** A custom-trained PyTorch Multi-Layer Perceptron calculates your baseline probability of securing your target role.
-* **🗺️ Gemini-Powered Roadmaps:** Synthesizes a custom, 3-phase execution plan (Baseline, Optimization, Alignment) using Google Generative AI based on your specific gaps.
+* **🗺️ Gemini-Powered Roadmaps:** Synthesizes a custom, 3-phase execution plan (Baseline, Optimization, Alignment) using Google Generative AI based on your specific gaps.(COMING SOON!!!)
 * **📊 Neural Fingerprinting:** Visualizes candidate strengths against role requirements using interactive, real-time radar charts.
 * **🗄️ Terminal Archive:** Secure, authenticated history logging via Firebase Realtime Database to track your roadmap evolution.
 * **🎙️ Mock Interviewer (WIP):** Upcoming voice-activated technical interview simulation.

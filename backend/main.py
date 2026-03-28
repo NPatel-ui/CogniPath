@@ -32,34 +32,28 @@ KEY_PATH = BASE_DIR / "serviceAccountKey.json"
 
 # ─── 1. FIREBASE INITIALIZATION ─────────────────────────────────────────────
 if not firebase_admin._apps:
-    firebase_creds_json = os.getenv("FIREBASE_SERVICE_ACCOUNT")
+    # 🎯 MATCHING YOUR RENDER VARIABLE NAME: FIREBASE_CONFIG
+    firebase_creds_json = os.getenv("FIREBASE_CONFIG") 
     
-    # Debug: This will show up in your Render logs (don't worry, it won't show the secret)
-    if firebase_creds_json:
-        print(f"📡 Found FIREBASE_SERVICE_ACCOUNT env var (Length: {len(firebase_creds_json)})")
-    else:
-        print("📡 FIREBASE_SERVICE_ACCOUNT env var NOT FOUND")
-
     if firebase_creds_json:
         try:
-            # Clean the string in case Render added extra quotes or whitespace
-            firebase_creds_json = firebase_creds_json.strip()
+            # Load credentials directly from the JSON string provided in Render
             cred_dict = json.loads(firebase_creds_json)
             cred = credentials.Certificate(cred_dict)
-            print("✅ Firebase successfully initialized via Environment Variable")
+            print("✅ Firebase initialized via 'FIREBASE_CONFIG' environment variable")
         except Exception as e:
-            print(f"❌ JSON Parsing Error: {e}")
-            # Fallback for local dev if the env var is malformed
+            print(f"❌ Error parsing FIREBASE_CONFIG JSON: {e}")
+            # Fallback to local file if the JSON string is malformed
             cred = credentials.Certificate(str(KEY_PATH))
     else:
-        # Local Fallback
+        # Fallback to local file (for your local VS Code development)
         if KEY_PATH.exists():
             cred = credentials.Certificate(str(KEY_PATH))
             print("🏠 Firebase initialized via local serviceAccountKey.json")
         else:
-            print("🚨 CRITICAL: No Firebase credentials found in Env or Local!")
-            # This is where your app is currently dying
-            raise FileNotFoundError("Firebase credentials missing in Env and Local file.")
+            print("🚨 CRITICAL: Variable 'FIREBASE_CONFIG' not found and local file missing!")
+            # This is where the status 1 crash happens if the variable is missing
+            raise FileNotFoundError("Firebase credentials missing in Render Env and Local folder.")
         
     firebase_admin.initialize_app(cred, {
         'databaseURL': 'https://cognipath-ed89f-default-rtdb.firebaseio.com/'

@@ -70,16 +70,15 @@ app = FastAPI(title="CogniPath Neural Engine")
 
 app.add_middleware(
     CORSMiddleware,
+    # 🎯 FIX 2: Ensure your EXACT Vercel URL is here without a trailing slash
     allow_origins=[
         "http://localhost:5173", 
-        "http://localhost:3000",
-        "https://cogni-path.vercel.app" # ⬅️ ADD YOUR VERCEL URL HERE
+        "https://cogni-path.vercel.app" 
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 # ─── 3. DATA MODELS ───────────────────────────────────────────────────────
 class UserRegister(BaseModel):
     fullName: str

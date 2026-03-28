@@ -1,42 +1,67 @@
-# 🧠 CogniPath Neural Engine
+<div align="center">
 
-CogniPath is an AI-powered placement prediction and career roadmap synthesizer. It leverages a custom PyTorch neural network to evaluate student profiles against target job descriptions, utilizing Google's Gemini AI to generate actionable, three-phase career roadmaps.
+<img src="https://capsule-render.vercel.app/api?type=waving&color=FF4500&height=200&section=header&text=CogniPath%20Neural%20Engine&fontSize=50&fontAlignY=38&desc=AI-Powered%20Career%20Roadmap%20Synthesizer&descAlignY=60&descAlign=62&fontColor=ffffff" />
 
-## ✨ Features
+<a href="https://github.com/NPatel-ui/cognipath">
+  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=800&size=22&pause=1000&color=FF4500&center=true&vCenter=true&width=600&lines=Placement+Probability+Prediction;Resume+Analysis+%26+Feature+Extraction;AI-Generated+Actionable+Roadmaps;Real-Time+Neural+Fingerprinting" alt="Typing SVG" />
+</a>
 
-* **Neural Resume Analysis:** Upload a PDF resume to instantly extract features and calculate a placement probability score using a trained Multi-Layer Perceptron (MLP).
-* **AI Roadmap Synthesis:** Generates a custom, 3-phase execution plan (Baseline, Optimization, Alignment) powered by Gemini 1.5 Flash.
-* **Radar Chart Fingerprinting:** Visualizes candidate strengths across Academics, Projects, Experience, Tech Skills, Soft Skills, and Target Fit.
-* **Secure Authentication:** End-to-end user authentication and session management powered by Firebase.
-* **Terminal Archive (History):** Automatically saves all past neural scans and roadmaps to a real-time database for future reference.
-* **Neural Interviewer (WIP):** An upcoming voice-activated mock interview module tailored to the user's target architecture.
+<p align="center">
+  <strong>Analyze. Synthesize. Execute.</strong><br>
+  An intelligent platform leveraging PyTorch and Google Gemini to turn static resumes into dynamic, high-probability career trajectories.
+</p>
 
-## 🛠️ Tech Stack
+<p align="center">
+  <img src="https://img.shields.io/badge/Status-Live-10B981?style=for-the-badge&logo=checkmarx&logoColor=white" alt="Status" />
+  <img src="https://img.shields.io/badge/Version-1.0.0-FF4500?style=for-the-badge" alt="Version" />
+  <img src="https://img.shields.io/badge/License-MIT-111111?style=for-the-badge" alt="License" />
+</p>
 
-**Frontend (Client Node)**
-* **Framework:** React 18 + Vite
-* **Routing:** React Router DOM v6
-* **Styling:** Tailwind CSS + Framer Motion (for page transitions and animations)
-* **Icons & UI:** Lucide React, React Hot Toast
-* **Hosting:** Vercel
+</div>
 
-**Backend (Neural Core)**
-* **Framework:** FastAPI (Python)
-* **Machine Learning:** PyTorch (PlacementMLP) + NumPy + Pandas
-* **Generative AI:** Google Generative AI (Gemini)
-* **PDF Parsing:** PyMuPDF (`fitz`)
-* **Database & Auth:** Firebase Admin SDK (Realtime Database)
-* **Hosting:** Render
+---
 
-## 🚀 Local Development Setup
+## ⚡ System Architecture
 
-### Prerequisites
-* Node.js (v18+)
-* Python (3.10+)
-* A Firebase Project with Realtime Database and Authentication enabled.
-* A Google Gemini API Key.
+CogniPath is built on a decoupled architecture, ensuring a lightning-fast frontend experience backed by a heavy-duty machine learning processing core.
 
-### 1. Clone the Repository
+<div align="center">
+
+| Client Node (Frontend) | Neural Core (Backend) | Cloud Infrastructure |
+| :---: | :---: | :---: |
+| ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) | ![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi) | ![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase) |
+| ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white) | ![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white) | ![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white) |
+| ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white) | ![Gemini](https://img.shields.io/badge/Google%20Gemini-8E75B2?style=for-the-badge&logo=google&logoColor=white) | ![Render](https://img.shields.io/badge/Render-%2346E3B7.svg?style=for-the-badge&logo=render&logoColor=white) |
+
+</div>
+
+---
+
+## 🚀 Core Modules
+
+* **📄 Resume Lab:** Upload a PDF to instantly extract features. The system parses your data to evaluate your Academic Excellence, Project Impact, Tech Stack, and more.
+* **🧠 Placement MLP Inference:** A custom-trained PyTorch Multi-Layer Perceptron calculates your baseline probability of securing your target role.
+* **🗺️ Gemini-Powered Roadmaps:** Synthesizes a custom, 3-phase execution plan (Baseline, Optimization, Alignment) using Google Generative AI based on your specific gaps.
+* **📊 Neural Fingerprinting:** Visualizes candidate strengths against role requirements using interactive, real-time radar charts.
+* **🗄️ Terminal Archive:** Secure, authenticated history logging via Firebase Realtime Database to track your roadmap evolution.
+* **🎙️ Mock Interviewer (WIP):** Upcoming voice-activated technical interview simulation.
+
+---
+
+## 📸 Interface Preview
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/NPatel-ui/cognipath/main/assets/demo-placeholder.gif" alt="CogniPath Demo" width="800" style="border-radius: 15px; border: 1px solid #333;" />
+  <p><em>Deep Carbon & Neon Crimson Theme</em></p>
+</div>
+
+---
+
+## ⚙️ Local Development Setup
+
+Want to run the Neural Engine locally? Follow these steps:
+
+### 1. Initialize the Repository
 ```bash
 git clone [https://github.com/NPatel-ui/cognipath.git](https://github.com/NPatel-ui/cognipath.git)
 cd cognipath

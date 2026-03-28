@@ -32,11 +32,20 @@ KEY_PATH = BASE_DIR / "serviceAccountKey.json"
 
 # ─── 1. FIREBASE INITIALIZATION ─────────────────────────────────────────────
 if not firebase_admin._apps:
-    cred = credentials.Certificate(KEY_PATH)
+    # Check for environment variable first (Production/Render)
+    firebase_creds = os.getenv("FIREBASE_SERVICE_ACCOUNT")
+    
+    if firebase_creds:
+        # Load credentials from the JSON string stored in Render
+        cred_dict = json.loads(firebase_creds)
+        cred = credentials.Certificate(cred_dict)
+    else:
+        # Fallback to local file (Local Development)
+        cred = credentials.Certificate(KEY_PATH)
+        
     firebase_admin.initialize_app(cred, {
         'databaseURL': 'https://cognipath-ed89f-default-rtdb.firebaseio.com/'
     })
-
 # ─── 2. SYSTEM CONSTANTS ──────────────────────────────────────────────────
 BRANCH_LIST = ["CSE", "ECE", "ME", "Civil", "IT", "Commerce", "BCCA", "BBA", "Accountancy", "Finance"]
 DEGREE_LIST = ["B.Tech", "B.Sc", "BCA", "MCA", "M.Tech", "B.Com", "M.Com", "BCCA", "BBA", "MBA"]

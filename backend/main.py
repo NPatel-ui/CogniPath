@@ -32,16 +32,27 @@ KEY_PATH = BASE_DIR / "serviceAccountKey.json"
 
 # ─── 1. FIREBASE INITIALIZATION ─────────────────────────────────────────────
 if not firebase_admin._apps:
-    # Check for environment variable first (Production/Render)
-    firebase_creds = os.getenv("FIREBASE_SERVICE_ACCOUNT")
+    # 1. Try to get credentials from Render Environment Variable
+    firebase_creds_json = os.getenv("FIREBASE_SERVICE_ACCOUNT")
     
-    if firebase_creds:
-        # Load credentials from the JSON string stored in Render
-        cred_dict = json.loads(firebase_creds)
-        cred = credentials.Certificate(cred_dict)
+    if firebase_creds_json:
+        try:
+            # Load credentials directly from the JSON string
+            cred_dict = json.loads(firebase_creds_json)
+            cred = credentials.Certificate(cred_dict)
+            print("✅ Firebase initialized via Environment Variable")
+        except Exception as e:
+            print(f"❌ Error parsing FIREBASE_SERVICE_ACCOUNT: {e}")
+            # Fallback if parsing fails
+            cred = credentials.Certificate(str(KEY_PATH))
     else:
-        # Fallback to local file (Local Development)
-        cred = credentials.Certificate(KEY_PATH)
+        # 2. Fallback to local file (for your local VS Code development)
+        if KEY_PATH.exists():
+            cred = credentials.Certificate(str(KEY_PATH))
+            print("🏠 Firebase initialized via local serviceAccountKey.json")
+        else:
+            print("🚨 CRITICAL: No Firebase credentials found!")
+            raise FileNotFoundError("Firebase credentials missing in Env and Local file.")
         
     firebase_admin.initialize_app(cred, {
         'databaseURL': 'https://cognipath-ed89f-default-rtdb.firebaseio.com/'

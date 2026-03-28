@@ -51,7 +51,8 @@ CogniPath is built on a decoupled architecture, ensuring a lightning-fast fronte
 
 <div align="center">
 
-<img src="assets/landing.png" alt="CogniPath Landing Page" width="800" style="border-radius: 15px; border: 1px solid #e2e8f0; margin-bottom: 20px;" />
+<img src="<img width="1898" height="1032" alt="Screenshot 2026-03-28 124139" src="https://github.com/user-attachments/assets/74b697a4-1fd0-4e5f-a43a-6542ddebf170" />
+" alt="CogniPath Landing Page" width="800" style="border-radius: 15px; border: 1px solid #e2e8f0; margin-bottom: 20px;" />
 <p><em>Neural Architecture Landing Interface</em></p>
 <br>
 

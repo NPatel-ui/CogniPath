@@ -2,15 +2,13 @@
 
 fastapi
 uvicorn
-python-dotenv
+python-multipart
+firebase-admin
+PyMuPDF
+torch
+numpy
+pandas
 google-generativeai
-torch>=2.0.0
-scikit-learn>=1.3.0
-pandas>=2.0.0
-numpy>=1.24.0
-firebase-admin>=6.2.0
-email-validator==2.1.1
-shap>=0.43.0
-matplotlib>=3.7.0
-seaborn>=0.12.0
-pymupdf>=1.18.0
+python-dotenv
+pydantic
+email-validator
